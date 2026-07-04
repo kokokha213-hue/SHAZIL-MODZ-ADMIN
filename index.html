@@ -6,6 +6,7 @@
     <title>SHAZIL MODZ · Premium Gaming Admin</title>
     <meta name="description" content="SHAZIL MODZ – premium gaming hub admin panel.">
     <meta name="keywords" content="SHAZIL MODZ, gaming, premium, files, admin">
+    <base href="/">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
@@ -128,7 +129,6 @@
         .toast-notification.error-toast .toast-icon{color:#ff6b6b;}
         .toast-notification.section-toast .toast-icon{color:#a78bfa;}
         
-        /* Section management specific styles */
         .section-badge{display:inline-block;padding:0.1rem 0.6rem;border-radius:40px;font-size:0.55rem;font-weight:600;letter-spacing:0.5px;}
         .section-badge.active{background:#4ade8022;border:1px solid #4ade8044;color:#4ade80;}
         .section-badge.inactive{background:#ff6b6b22;border:1px solid #ff6b6b44;color:#ff6b6b;}
@@ -148,13 +148,11 @@
 </head>
 <body>
 
-<!-- ===== AUTH LOADING ===== -->
 <div class="auth-loading" id="authLoading">
     <div class="loader-ring"></div>
     <p>🔐 Verifying session...</p>
 </div>
 
-<!-- ===== TOAST NOTIFICATION ===== -->
 <div class="toast-notification" id="toastNotification">
     <div class="toast-icon" id="toastIcon"><i class="fas fa-bell"></i></div>
     <div class="toast-content">
@@ -164,7 +162,6 @@
     <button class="toast-close" id="toastClose"><i class="fas fa-times"></i></button>
 </div>
 
-<!-- ===== LOGIN ===== -->
 <div id="passwordOverlay">
     <div class="login-box">
         <h2><i class="fas fa-crown"></i> SHAZIL MODZ</h2>
@@ -181,7 +178,6 @@
     </div>
 </div>
 
-<!-- ===== MAIN APP ===== -->
 <div class="glass-container" id="mainApp" style="display:none;">
     <div class="brand-bar">
         <div class="logo"><h1><i class="fas fa-crown"></i> SHAZIL MODZ</h1></div>
@@ -205,26 +201,20 @@
         <div class="announce-text" id="announceText"><strong>📢</strong> Loading...</div>
     </div>
 
-    <!-- ===== DYNAMIC SECTIONS ===== -->
-    <div id="dynamicSectionsContainer">
-        <!-- Sections will be rendered here dynamically -->
-    </div>
+    <div id="dynamicSectionsContainer"></div>
 
-    <!-- ===== FF HEADSHOTS ===== -->
     <div class="section-title" style="margin-top:1.5rem;">
         <h3><i class="fas fa-crosshairs" style="color:#ff4d2d;"></i> FF Headshots File</h3>
         <span class="ff-badge headshot"><i class="fas fa-bolt"></i> Free Fire</span>
     </div>
     <div class="file-grid" id="ffHeadshotsGrid"></div>
 
-    <!-- ===== FF LOCATION ===== -->
     <div class="section-title" style="margin-top:1.5rem;">
         <h3><i class="fas fa-map-marker-alt" style="color:#00ff88;"></i> FF Location File</h3>
         <span class="ff-badge location"><i class="fas fa-map-pin"></i> Free Fire</span>
     </div>
     <div class="file-grid" id="ffLocationGrid"></div>
 
-    <!-- ===== ERROR FIR YA PROBLEM FIX ===== -->
     <div class="section-title" style="margin-top:1.5rem;">
         <h3><i class="fas fa-exclamation-triangle" style="color:#ff6b6b;"></i> ERROR FIR YA PROBLEM FIX</h3>
         <span class="ff-badge errorfix"><i class="fas fa-tools"></i> Fix & Solutions</span>
@@ -234,7 +224,6 @@
     <div class="section-title"><h3><i class="fas fa-video"></i> Gaming Videos</h3></div>
     <div class="video-grid" id="videoGrid"></div>
 
-    <!-- ===== ADMIN PANEL ===== -->
     <div class="admin-panel">
         <div class="admin-header">
             <h3><i class="fas fa-user-cog"></i> Admin Panel</h3>
@@ -244,7 +233,6 @@
             </div>
         </div>
         <div class="admin-grid">
-            <!-- ===== SECTION MANAGEMENT - NEW ===== -->
             <div class="admin-card" style="border-color:#a78bfa44;grid-column:1/-1;">
                 <div class="card-title" style="color:#a78bfa;"><i class="fas fa-layer-group"></i> Section Management</div>
                 <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.8rem;">
@@ -258,7 +246,6 @@
                 </div>
             </div>
 
-            <!-- ===== ANNOUNCEMENT ===== -->
             <div class="admin-card">
                 <div class="card-title"><i class="fas fa-bullhorn"></i> Announcement</div>
                 <input type="text" id="adminAnnounceInput" placeholder="New announcement text">
@@ -270,7 +257,6 @@
                 <div class="admin-list" id="adminAnnounceList"></div>
             </div>
 
-            <!-- ===== FILES ===== -->
             <div class="admin-card">
                 <div class="card-title"><i class="fas fa-file"></i> Manage Files</div>
                 <select id="adminFileSection" style="width:100%;padding:0.6rem 1rem;background:#010a14;border:1px solid #1f4a6b;border-radius:40px;color:white;font-size:0.9rem;outline:none;margin-bottom:0.6rem;">
@@ -285,7 +271,6 @@
                 <div class="admin-list" id="adminFileList"></div>
             </div>
 
-            <!-- ===== FF HEADSHOTS ===== -->
             <div class="admin-card" style="border-color:#ff4d2d44;">
                 <div class="card-title" style="color:#ff6b3d;"><i class="fas fa-crosshairs"></i> FF Headshots</div>
                 <input type="text" id="adminFFHeadshotTitle" placeholder="File title">
@@ -296,7 +281,6 @@
                 <div class="admin-list" id="adminFFHeadshotList"></div>
             </div>
 
-            <!-- ===== FF LOCATION ===== -->
             <div class="admin-card" style="border-color:#00ff8844;">
                 <div class="card-title" style="color:#00ff88;"><i class="fas fa-map-marker-alt"></i> FF Location</div>
                 <input type="text" id="adminFFLocationTitle" placeholder="File title">
@@ -307,7 +291,6 @@
                 <div class="admin-list" id="adminFFLocationList"></div>
             </div>
 
-            <!-- ===== ERROR FIR ===== -->
             <div class="admin-card" style="border-color:#ff6b6b44;">
                 <div class="card-title" style="color:#ff6b6b;"><i class="fas fa-exclamation-triangle"></i> ERROR FIR / PROBLEM FIX</div>
                 <input type="text" id="adminErrorTitle" placeholder="Video title (e.g., Error 505 Fix)">
@@ -322,7 +305,6 @@
                 <div class="admin-list" id="adminErrorList"></div>
             </div>
 
-            <!-- ===== VIDEOS ===== -->
             <div class="admin-card">
                 <div class="card-title"><i class="fas fa-video"></i> Manage Videos</div>
                 <input type="text" id="adminVideoTitle" placeholder="Video title">
@@ -336,7 +318,6 @@
                 <div class="admin-list" id="adminVideoList"></div>
             </div>
 
-            <!-- ===== USERS ===== -->
             <div class="admin-card">
                 <div class="card-title"><i class="fas fa-users"></i> Manage Users</div>
                 <input type="email" id="adminUserEmail" placeholder="User email">
@@ -357,9 +338,6 @@
 </div>
 
 <script>
-// ============================================================
-// FIREBASE CONFIG - UNCHANGED
-// ============================================================
 const firebaseConfig = {
   apiKey: "AIzaSyDP5kiPVcbyQ2it1OCWQXJ73EK-twoqTfU",
   authDomain: "my-personal-hack.firebaseapp.com",
@@ -376,9 +354,6 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
 
-// ============================================================
-// TOAST NOTIFICATION SYSTEM
-// ============================================================
 const toast = document.getElementById('toastNotification');
 const toastIcon = document.getElementById('toastIcon');
 const toastTitle = document.getElementById('toastTitle');
@@ -389,7 +364,6 @@ let toastTimeout = null;
 function showToast(title, message, type = 'info') {
     toastTitle.textContent = title;
     toastMessage.textContent = message;
-    
     toast.className = 'toast-notification';
     const icons = {
         file: '<i class="fas fa-file"></i>',
@@ -400,7 +374,6 @@ function showToast(title, message, type = 'info') {
     };
     toastIcon.innerHTML = icons[type] || '<i class="fas fa-bell"></i>';
     toast.classList.add(type + '-toast');
-    
     toast.classList.add('show');
     if (toastTimeout) clearTimeout(toastTimeout);
     toastTimeout = setTimeout(() => toast.classList.remove('show'), 6000);
@@ -424,9 +397,6 @@ function requestNotificationPermission() {
     }
 }
 
-// ============================================================
-// STATE
-// ============================================================
 let isAuthorized = false;
 let currentUser = null;
 let userPasswords = {};
@@ -437,14 +407,12 @@ let isFirstLoad = true;
 let lastNotifTime = 0;
 const NOTIF_COOLDOWN = 3000;
 
-// Track previous counts for notifications
 let previousFileCount = 0;
 let previousVideoCount = 0;
 let previousAnnouncementText = '';
 let previousHeadshotCount = 0;
 let previousLocationCount = 0;
 let previousErrorCount = 0;
-let previousSectionCount = 0;
 
 function canSendNotification() {
     const now = Date.now();
@@ -453,9 +421,6 @@ function canSendNotification() {
     return true;
 }
 
-// ============================================================
-// DOM REFS
-// ============================================================
 const overlay = document.getElementById('passwordOverlay');
 const mainApp = document.getElementById('mainApp');
 const authLoading = document.getElementById('authLoading');
@@ -470,17 +435,13 @@ const logoutBtn = document.getElementById('logoutBtn');
 const togglePass = document.getElementById('togglePass');
 const eyeIcon = document.getElementById('eyeIcon');
 
-// Section Management
 const adminSectionName = document.getElementById('adminSectionName');
 const adminSectionIcon = document.getElementById('adminSectionIcon');
 const adminAddSection = document.getElementById('adminAddSection');
 const adminSectionStatus = document.getElementById('adminSectionStatus');
 const adminSectionList = document.getElementById('adminSectionList');
-
-// File section selector
 const adminFileSection = document.getElementById('adminFileSection');
 
-// Other admin refs
 const adminAnnounceInput = document.getElementById('adminAnnounceInput');
 const adminUpdateAnnounce = document.getElementById('adminUpdateAnnounce');
 const adminDeleteAnnounce = document.getElementById('adminDeleteAnnounce');
@@ -536,9 +497,6 @@ const adminEyeIcon = document.getElementById('adminEyeIcon');
 
 const sectionsContainer = document.getElementById('dynamicSectionsContainer');
 
-// ============================================================
-// PASSWORD TOGGLES
-// ============================================================
 let passVisible = false;
 togglePass.addEventListener('click', function() {
     passVisible = !passVisible;
@@ -555,9 +513,6 @@ adminTogglePass.addEventListener('click', function() {
     adminEyeIcon.style.color = adminPassVisible ? '#00ccff' : '#3a6a8a';
 });
 
-// ============================================================
-// AUTH STATE
-// ============================================================
 auth.onAuthStateChanged((user) => {
     authLoading.classList.add('hidden');
     if (user) {
@@ -619,10 +574,6 @@ logoutBtn.addEventListener('click', function() {
         isAuthorized = false;
     });
 });
-
-// ============================================================
-// SECTION MANAGEMENT - CORE FEATURE
-// ============================================================
 
 function loadSections() {
     db.collection('sections').orderBy('order', 'asc').onSnapshot((snapshot) => {
@@ -762,10 +713,6 @@ function deleteSection(id, name) {
 window.editSection = editSection;
 window.deleteSection = deleteSection;
 
-// ============================================================
-// RENDER DYNAMIC SECTIONS
-// ============================================================
-
 function renderDynamicSections() {
     db.collection('sections').orderBy('order', 'asc').get()
         .then((snapshot) => {
@@ -848,10 +795,6 @@ function loadSectionItems(sectionId, sectionName) {
         });
 }
 
-// ============================================================
-// NOTIFICATION LISTENERS
-// ============================================================
-
 db.collection('files').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
     if (!isFirstLoad && snapshot.size > previousFileCount && previousFileCount > 0) {
         const newDocs = snapshot.docs.slice(0, snapshot.size - previousFileCount);
@@ -912,10 +855,6 @@ db.collection('content').doc('announcement').onSnapshot((doc) => {
     previousAnnouncementText = currentText;
 }, () => {});
 
-// ============================================================
-// ANNOUNCEMENT FUNCTIONS
-// ============================================================
-
 adminUpdateAnnounce.addEventListener('click', function() {
     const text = adminAnnounceInput.value.trim();
     if (!text) {
@@ -952,10 +891,6 @@ adminDeleteAnnounce.addEventListener('click', function() {
             adminAnnounceStatus.className = 'admin-status error';
         });
 });
-
-// ============================================================
-// USER FUNCTIONS
-// ============================================================
 
 adminAddUser.addEventListener('click', function() {
     const email = adminUserEmail.value.trim();
@@ -1055,10 +990,6 @@ function loadUsers() {
 window.deleteUser = deleteUser;
 window.viewPassword = viewPassword;
 
-// ============================================================
-// FF HEADSHOTS FUNCTIONS
-// ============================================================
-
 adminAddFFHeadshot.addEventListener('click', function() {
     const title = adminFFHeadshotTitle.value.trim();
     const link = adminFFHeadshotLink.value.trim();
@@ -1095,10 +1026,6 @@ function deleteFFHeadshot(id, title) {
 }
 window.deleteFFHeadshot = deleteFFHeadshot;
 
-// ============================================================
-// FF LOCATION FUNCTIONS
-// ============================================================
-
 adminAddFFLocation.addEventListener('click', function() {
     const title = adminFFLocationTitle.value.trim();
     const link = adminFFLocationLink.value.trim();
@@ -1134,10 +1061,6 @@ function deleteFFLocation(id, title) {
     }
 }
 window.deleteFFLocation = deleteFFLocation;
-
-// ============================================================
-// ERROR FIR FUNCTIONS
-// ============================================================
 
 function resetErrorForm() {
     adminErrorTitle.value = '';
@@ -1227,10 +1150,6 @@ function deleteError(id, title) {
 window.deleteError = deleteError;
 window.editError = editError;
 
-// ============================================================
-// VIDEO FUNCTIONS
-// ============================================================
-
 function resetVideoForm() {
     adminVideoTitle.value = '';
     adminVideoLink.value = '';
@@ -1315,10 +1234,6 @@ function deleteVideo(id, title) {
 window.deleteVideo = deleteVideo;
 window.editVideo = editVideo;
 
-// ============================================================
-// FILE FUNCTIONS WITH SECTION SUPPORT
-// ============================================================
-
 adminAddFile.addEventListener('click', function() {
     const title = adminFileTitle.value.trim();
     const label = adminFileLabel.value.trim() || 'PREMIUM';
@@ -1367,13 +1282,9 @@ function deleteFile(id, title) {
 }
 window.deleteFile = deleteFile;
 
-// ============================================================
-// LOAD ALL DATA
-// ============================================================
 function loadAllData() {
     loadSections();
     
-    // Files
     db.collection('files').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
         const grid = document.getElementById('fileGrid');
         grid.innerHTML = '';
@@ -1434,7 +1345,6 @@ function loadAllData() {
         }
     }, () => {});
 
-    // FF Headshots
     db.collection('ffHeadshots').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
         const grid = document.getElementById('ffHeadshotsGrid');
         grid.innerHTML = '';
@@ -1492,7 +1402,6 @@ function loadAllData() {
         }
     }, () => {});
 
-    // FF Location
     db.collection('ffLocation').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
         const grid = document.getElementById('ffLocationGrid');
         grid.innerHTML = '';
@@ -1550,7 +1459,6 @@ function loadAllData() {
         }
     }, () => {});
 
-    // ERROR FIR
     db.collection('errorFixes').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
         const grid = document.getElementById('errorGrid');
         grid.innerHTML = '';
@@ -1598,7 +1506,6 @@ function loadAllData() {
         }
     }, () => {});
 
-    // Videos
     db.collection('videos').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
         const grid = document.getElementById('videoGrid');
         grid.innerHTML = '';
@@ -1642,7 +1549,6 @@ function loadAllData() {
         }
     }, () => {});
 
-    // Counters
     db.collection('counters').doc('stats').update({ visitors: firebase.firestore.FieldValue.increment(1) }).catch(() => {});
     db.collection('counters').doc('stats').onSnapshot((doc) => {
         if (doc.exists) {
