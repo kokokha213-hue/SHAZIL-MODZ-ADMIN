@@ -81,6 +81,7 @@
         .admin-card .btn-sm.danger{background:#5f1a1a;border-color:#8b2a2a;}
         .admin-card .btn-sm.warning{background:#5f5a1a;border-color:#8b8a2a;}
         .admin-card .btn-sm.info{background:#1a3a5f;border-color:#2a6a8b;}
+        .admin-card .btn-sm.purple{background:#3a1a5f;border-color:#5a2a8b;}
         .admin-status{font-size:0.75rem;margin-top:0.5rem;color:#6a8fa8;min-height:1.2rem;}
         .admin-status.success{color:#4ade80;}
         .admin-status.error{color:#ff6b6b;}
@@ -110,11 +111,9 @@
         .file-card:hover .edit-btn,.video-card:hover .edit-btn,.error-card:hover .edit-btn{opacity:1;}
         .edit-btn:hover{background:#1a3a5f44;}
         
-        /* Notification status badge */
         .notif-status-badge{display:inline-block;background:#4ade8022;border:1px solid #4ade8044;color:#4ade80;padding:0.1rem 0.6rem;border-radius:40px;font-size:0.5rem;font-weight:600;letter-spacing:1px;margin-left:0.5rem;animation:pulseNotif 2s ease-in-out infinite;}
         @keyframes pulseNotif{0%,100%{opacity:1;}50%{opacity:0.5;}}
         
-        /* In-app notification toast */
         .toast-notification{position:fixed;bottom:20px;right:20px;z-index:99999;background:rgba(15,26,43,0.95);backdrop-filter:blur(10px);border-radius:1.2rem;padding:1rem 1.5rem;border:1px solid rgba(0,183,255,0.2);box-shadow:0 20px 60px rgba(0,0,0,0.5);max-width:380px;width:100%;transform:translateY(120px);opacity:0;transition:all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);display:flex;gap:0.8rem;align-items:flex-start;pointer-events:none;}
         .toast-notification.show{transform:translateY(0);opacity:1;pointer-events:auto;}
         .toast-notification .toast-icon{font-size:1.8rem;flex-shrink:0;}
@@ -127,6 +126,21 @@
         .toast-notification.video-toast .toast-icon{color:#60a5fa;}
         .toast-notification.announce-toast .toast-icon{color:#fbbf24;}
         .toast-notification.error-toast .toast-icon{color:#ff6b6b;}
+        .toast-notification.section-toast .toast-icon{color:#a78bfa;}
+        
+        /* Section management specific styles */
+        .section-badge{display:inline-block;padding:0.1rem 0.6rem;border-radius:40px;font-size:0.55rem;font-weight:600;letter-spacing:0.5px;}
+        .section-badge.active{background:#4ade8022;border:1px solid #4ade8044;color:#4ade80;}
+        .section-badge.inactive{background:#ff6b6b22;border:1px solid #ff6b6b44;color:#ff6b6b;}
+        
+        .dynamic-section{background:#0d1c2b;border-radius:1.5rem;padding:1rem;margin-bottom:1.5rem;border:1px solid #1f4a6b;transition:0.3s;}
+        .dynamic-section .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;flex-wrap:wrap;}
+        .dynamic-section .section-header h4{color:#b0d5ff;font-size:0.9rem;}
+        .dynamic-section .section-content{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0.8rem;}
+        .dynamic-section .section-content .item-card{background:#0f1a2b;border-radius:1rem;padding:0.6rem;border:1px solid #1f4a6b;}
+        .dynamic-section .section-content .item-card .item-label{font-size:0.5rem;color:#7797b0;text-transform:uppercase;letter-spacing:1px;}
+        .dynamic-section .section-content .item-card h5{font-size:0.85rem;color:#d8edff;}
+        .empty-section-msg{color:#3a6a8a;font-size:0.7rem;text-align:center;padding:0.5rem;grid-column:1/-1;}
         
         @media(max-width:700px){.admin-grid{grid-template-columns:1fr;}.file-grid,.video-grid,.error-grid{grid-template-columns:1fr 1fr;}.hero-text h2{font-size:1.4rem;}.toast-notification{max-width:300px;bottom:10px;right:10px;padding:0.8rem 1rem;}}
         @media(max-width:480px){.file-grid,.video-grid,.error-grid{grid-template-columns:1fr;}}
@@ -191,8 +205,10 @@
         <div class="announce-text" id="announceText"><strong>📢</strong> Loading...</div>
     </div>
 
-    <div class="section-title"><h3><i class="fas fa-folder-open"></i> Game Files</h3></div>
-    <div class="file-grid" id="fileGrid"></div>
+    <!-- ===== DYNAMIC SECTIONS ===== -->
+    <div id="dynamicSectionsContainer">
+        <!-- Sections will be rendered here dynamically -->
+    </div>
 
     <!-- ===== FF HEADSHOTS ===== -->
     <div class="section-title" style="margin-top:1.5rem;">
@@ -228,6 +244,20 @@
             </div>
         </div>
         <div class="admin-grid">
+            <!-- ===== SECTION MANAGEMENT - NEW ===== -->
+            <div class="admin-card" style="border-color:#a78bfa44;grid-column:1/-1;">
+                <div class="card-title" style="color:#a78bfa;"><i class="fas fa-layer-group"></i> Section Management</div>
+                <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:0.8rem;">
+                    <input type="text" id="adminSectionName" placeholder="New section name (e.g., 'Mod Files')" style="flex:1;min-width:180px;">
+                    <input type="text" id="adminSectionIcon" placeholder="Icon (e.g., 'fa-gamepad')" style="flex:0 0 150px;" value="fa-folder">
+                    <button class="btn-sm success" id="adminAddSection"><i class="fas fa-plus"></i> Add Section</button>
+                </div>
+                <div class="admin-status" id="adminSectionStatus"></div>
+                <div class="admin-list" id="adminSectionList">
+                    <div style="color:#3a6a8a;font-size:0.7rem;text-align:center;padding:0.5rem;">Loading sections...</div>
+                </div>
+            </div>
+
             <!-- ===== ANNOUNCEMENT ===== -->
             <div class="admin-card">
                 <div class="card-title"><i class="fas fa-bullhorn"></i> Announcement</div>
@@ -243,6 +273,9 @@
             <!-- ===== FILES ===== -->
             <div class="admin-card">
                 <div class="card-title"><i class="fas fa-file"></i> Manage Files</div>
+                <select id="adminFileSection" style="width:100%;padding:0.6rem 1rem;background:#010a14;border:1px solid #1f4a6b;border-radius:40px;color:white;font-size:0.9rem;outline:none;margin-bottom:0.6rem;">
+                    <option value="default">Default Section</option>
+                </select>
                 <input type="text" id="adminFileTitle" placeholder="File title">
                 <input type="text" id="adminFileLabel" placeholder="Label" value="PREMIUM">
                 <input type="text" id="adminFileLink" placeholder="File link (URL)">
@@ -320,7 +353,7 @@
         </div>
     </div>
 
-    <div class="footer-note"><i class="fas fa-shield-alt"></i> ABID SIR · premium gaming · secure · <i class="fas fa-bell"></i> Realtime Notifications Active</div>
+    <div class="footer-note"><i class="fas fa-shield-alt"></i> SHAZIL MODZ · premium gaming · secure · <i class="fas fa-bell"></i> Realtime Notifications Active</div>
 </div>
 
 <script>
@@ -344,7 +377,7 @@ const db = firebase.firestore();
 db.enablePersistence({ synchronizeTabs: true }).catch(() => {});
 
 // ============================================================
-// TOAST NOTIFICATION SYSTEM - NEW
+// TOAST NOTIFICATION SYSTEM
 // ============================================================
 const toast = document.getElementById('toastNotification');
 const toastIcon = document.getElementById('toastIcon');
@@ -354,238 +387,71 @@ const toastClose = document.getElementById('toastClose');
 let toastTimeout = null;
 
 function showToast(title, message, type = 'info') {
-    // Update content
     toastTitle.textContent = title;
     toastMessage.textContent = message;
     
-    // Set icon
     toast.className = 'toast-notification';
-    if (type === 'file') {
-        toastIcon.innerHTML = '<i class="fas fa-file"></i>';
-        toast.classList.add('file-toast');
-    } else if (type === 'video') {
-        toastIcon.innerHTML = '<i class="fas fa-video"></i>';
-        toast.classList.add('video-toast');
-    } else if (type === 'announcement') {
-        toastIcon.innerHTML = '<i class="fas fa-bullhorn"></i>';
-        toast.classList.add('announce-toast');
-    } else if (type === 'error') {
-        toastIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-        toast.classList.add('error-toast');
-    } else {
-        toastIcon.innerHTML = '<i class="fas fa-bell"></i>';
-    }
+    const icons = {
+        file: '<i class="fas fa-file"></i>',
+        video: '<i class="fas fa-video"></i>',
+        announcement: '<i class="fas fa-bullhorn"></i>',
+        error: '<i class="fas fa-exclamation-triangle"></i>',
+        section: '<i class="fas fa-layer-group"></i>'
+    };
+    toastIcon.innerHTML = icons[type] || '<i class="fas fa-bell"></i>';
+    toast.classList.add(type + '-toast');
     
-    // Show toast
     toast.classList.add('show');
-    
-    // Clear existing timeout
-    if (toastTimeout) {
-        clearTimeout(toastTimeout);
-    }
-    
-    // Auto-hide after 6 seconds
-    toastTimeout = setTimeout(() => {
-        toast.classList.remove('show');
-    }, 6000);
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => toast.classList.remove('show'), 6000);
 }
 
-// Close button
 toastClose.addEventListener('click', () => {
     toast.classList.remove('show');
-    if (toastTimeout) {
-        clearTimeout(toastTimeout);
-    }
+    if (toastTimeout) clearTimeout(toastTimeout);
 });
 
-// Click outside to close
 document.addEventListener('click', (e) => {
     if (toast.classList.contains('show') && !toast.contains(e.target)) {
         toast.classList.remove('show');
-        if (toastTimeout) {
-            clearTimeout(toastTimeout);
-        }
+        if (toastTimeout) clearTimeout(toastTimeout);
     }
 });
 
-// ============================================================
-// BROWSER NOTIFICATION PERMISSION
-// ============================================================
 function requestNotificationPermission() {
     if ('Notification' in window && Notification.permission === 'default') {
-        Notification.requestPermission().then(permission => {
-            console.log('📢 Notification permission:', permission);
-        });
+        Notification.requestPermission();
     }
 }
 
 // ============================================================
-// REALTIME NOTIFICATION LISTENERS - NEW
+// STATE
 // ============================================================
+let isAuthorized = false;
+let currentUser = null;
+let userPasswords = {};
+let currentAnnouncementId = null;
+let editingErrorId = null;
+let editingVideoId = null;
+let isFirstLoad = true;
+let lastNotifTime = 0;
+const NOTIF_COOLDOWN = 3000;
 
-// Track previous state for detecting changes
+// Track previous counts for notifications
 let previousFileCount = 0;
 let previousVideoCount = 0;
 let previousAnnouncementText = '';
 let previousHeadshotCount = 0;
 let previousLocationCount = 0;
 let previousErrorCount = 0;
-let isFirstLoad = true;
-
-// Store last notification time to prevent spam
-let lastNotifTime = 0;
-const NOTIF_COOLDOWN = 3000; // 3 seconds between notifications
+let previousSectionCount = 0;
 
 function canSendNotification() {
     const now = Date.now();
-    if (now - lastNotifTime < NOTIF_COOLDOWN) {
-        return false;
-    }
+    if (now - lastNotifTime < NOTIF_COOLDOWN) return false;
     lastNotifTime = now;
     return true;
 }
-
-// ===== FILES LISTENER - NEW FILE DETECTION =====
-db.collection('files').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
-    if (!isFirstLoad && snapshot.size > previousFileCount && previousFileCount > 0) {
-        const newDocs = snapshot.docs.slice(0, snapshot.size - previousFileCount);
-        newDocs.forEach(doc => {
-            const data = doc.data();
-            if (data.title && canSendNotification()) {
-                const title = '🔥 New File Added';
-                const body = `${data.title} - A new premium file has been uploaded.`;
-                
-                // Show toast
-                showToast(title, body, 'file');
-                
-                // Show browser notification
-                if ('Notification' in window && Notification.permission === 'granted') {
-                    new Notification(title, {
-                        body: body,
-                        icon: '/favicon.ico',
-                        badge: '/badge-icon.png',
-                        vibrate: [200, 100, 200]
-                    });
-                }
-            }
-        });
-    }
-    previousFileCount = snapshot.size;
-}, () => {});
-
-// ===== VIDEOS LISTENER - NEW VIDEO DETECTION =====
-db.collection('videos').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
-    if (!isFirstLoad && snapshot.size > previousVideoCount && previousVideoCount > 0) {
-        const newDocs = snapshot.docs.slice(0, snapshot.size - previousVideoCount);
-        newDocs.forEach(doc => {
-            const data = doc.data();
-            if (data.title && canSendNotification()) {
-                const title = '🎥 New Video Added';
-                const body = `${data.title} - A new gaming video has been uploaded.`;
-                
-                showToast(title, body, 'video');
-                
-                if ('Notification' in window && Notification.permission === 'granted') {
-                    new Notification(title, {
-                        body: body,
-                        icon: '/favicon.ico',
-                        badge: '/badge-icon.png',
-                        vibrate: [200, 100, 200]
-                    });
-                }
-            }
-        });
-    }
-    previousVideoCount = snapshot.size;
-}, () => {});
-
-// ===== FF HEADSHOTS LISTENER =====
-db.collection('ffHeadshots').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
-    if (!isFirstLoad && snapshot.size > previousHeadshotCount && previousHeadshotCount > 0) {
-        const newDocs = snapshot.docs.slice(0, snapshot.size - previousHeadshotCount);
-        newDocs.forEach(doc => {
-            const data = doc.data();
-            if (data.title && canSendNotification()) {
-                const title = '🔥 New Headshot File Added';
-                const body = `${data.title} - Download now!`;
-                showToast(title, body, 'file');
-                if ('Notification' in window && Notification.permission === 'granted') {
-                    new Notification(title, { body: body, icon: '/favicon.ico', vibrate: [200, 100, 200] });
-                }
-            }
-        });
-    }
-    previousHeadshotCount = snapshot.size;
-}, () => {});
-
-// ===== FF LOCATION LISTENER =====
-db.collection('ffLocation').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
-    if (!isFirstLoad && snapshot.size > previousLocationCount && previousLocationCount > 0) {
-        const newDocs = snapshot.docs.slice(0, snapshot.size - previousLocationCount);
-        newDocs.forEach(doc => {
-            const data = doc.data();
-            if (data.title && canSendNotification()) {
-                const title = '📍 New Location File Added';
-                const body = `${data.title} - Download now!`;
-                showToast(title, body, 'file');
-                if ('Notification' in window && Notification.permission === 'granted') {
-                    new Notification(title, { body: body, icon: '/favicon.ico', vibrate: [200, 100, 200] });
-                }
-            }
-        });
-    }
-    previousLocationCount = snapshot.size;
-}, () => {});
-
-// ===== ERROR FIXES LISTENER =====
-db.collection('errorFixes').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
-    if (!isFirstLoad && snapshot.size > previousErrorCount && previousErrorCount > 0) {
-        const newDocs = snapshot.docs.slice(0, snapshot.size - previousErrorCount);
-        newDocs.forEach(doc => {
-            const data = doc.data();
-            if (data.title && canSendNotification()) {
-                const title = '🛠️ New Error Fix Added';
-                const body = `${data.title} - Check the solution now!`;
-                showToast(title, body, 'error');
-                if ('Notification' in window && Notification.permission === 'granted') {
-                    new Notification(title, { body: body, icon: '/favicon.ico', vibrate: [200, 100, 200] });
-                }
-            }
-        });
-    }
-    previousErrorCount = snapshot.size;
-}, () => {});
-
-// ===== ANNOUNCEMENT LISTENER - NEW ANNOUNCEMENT DETECTION =====
-db.collection('content').doc('announcement').onSnapshot((doc) => {
-    const el = document.getElementById('announceText');
-    let currentText = '';
-    if (doc.exists) {
-        const data = doc.data();
-        currentText = data.text || 'Welcome!';
-        el.innerHTML = `<strong>📢</strong> ${currentText}`;
-        adminAnnounceInput.value = data.text || '';
-    } else {
-        el.innerHTML = '<strong>📢</strong> No announcement';
-        adminAnnounceInput.value = '';
-    }
-    
-    // Detect changes
-    if (!isFirstLoad && currentText && previousAnnouncementText && currentText !== previousAnnouncementText && canSendNotification()) {
-        const title = '📢 New Announcement';
-        const body = currentText;
-        showToast(title, body, 'announcement');
-        if ('Notification' in window && Notification.permission === 'granted') {
-            new Notification(title, {
-                body: body,
-                icon: '/favicon.ico',
-                badge: '/badge-icon.png',
-                vibrate: [200, 100, 200]
-            });
-        }
-    }
-    previousAnnouncementText = currentText;
-}, () => {});
 
 // ============================================================
 // DOM REFS
@@ -604,7 +470,17 @@ const logoutBtn = document.getElementById('logoutBtn');
 const togglePass = document.getElementById('togglePass');
 const eyeIcon = document.getElementById('eyeIcon');
 
-// Admin
+// Section Management
+const adminSectionName = document.getElementById('adminSectionName');
+const adminSectionIcon = document.getElementById('adminSectionIcon');
+const adminAddSection = document.getElementById('adminAddSection');
+const adminSectionStatus = document.getElementById('adminSectionStatus');
+const adminSectionList = document.getElementById('adminSectionList');
+
+// File section selector
+const adminFileSection = document.getElementById('adminFileSection');
+
+// Other admin refs
 const adminAnnounceInput = document.getElementById('adminAnnounceInput');
 const adminUpdateAnnounce = document.getElementById('adminUpdateAnnounce');
 const adminDeleteAnnounce = document.getElementById('adminDeleteAnnounce');
@@ -619,7 +495,6 @@ const adminAddFile = document.getElementById('adminAddFile');
 const adminFileStatus = document.getElementById('adminFileStatus');
 const adminFileList = document.getElementById('adminFileList');
 
-// FF Headshots
 const adminFFHeadshotTitle = document.getElementById('adminFFHeadshotTitle');
 const adminFFHeadshotLink = document.getElementById('adminFFHeadshotLink');
 const adminFFHeadshotVersion = document.getElementById('adminFFHeadshotVersion');
@@ -627,7 +502,6 @@ const adminAddFFHeadshot = document.getElementById('adminAddFFHeadshot');
 const adminFFHeadshotStatus = document.getElementById('adminFFHeadshotStatus');
 const adminFFHeadshotList = document.getElementById('adminFFHeadshotList');
 
-// FF Location
 const adminFFLocationTitle = document.getElementById('adminFFLocationTitle');
 const adminFFLocationLink = document.getElementById('adminFFLocationLink');
 const adminFFLocationVersion = document.getElementById('adminFFLocationVersion');
@@ -635,7 +509,6 @@ const adminAddFFLocation = document.getElementById('adminAddFFLocation');
 const adminFFLocationStatus = document.getElementById('adminFFLocationStatus');
 const adminFFLocationList = document.getElementById('adminFFLocationList');
 
-// ERROR FIR
 const adminErrorTitle = document.getElementById('adminErrorTitle');
 const adminErrorLink = document.getElementById('adminErrorLink');
 const adminErrorLabel = document.getElementById('adminErrorLabel');
@@ -645,7 +518,6 @@ const adminCancelErrorEdit = document.getElementById('adminCancelErrorEdit');
 const adminErrorStatus = document.getElementById('adminErrorStatus');
 const adminErrorList = document.getElementById('adminErrorList');
 
-// Videos
 const adminVideoTitle = document.getElementById('adminVideoTitle');
 const adminVideoLabel = document.getElementById('adminVideoLabel');
 const adminVideoLink = document.getElementById('adminVideoLink');
@@ -654,7 +526,6 @@ const adminCancelVideoEdit = document.getElementById('adminCancelVideoEdit');
 const adminVideoStatus = document.getElementById('adminVideoStatus');
 const adminVideoList = document.getElementById('adminVideoList');
 
-// Users
 const adminUserEmail = document.getElementById('adminUserEmail');
 const adminUserPassword = document.getElementById('adminUserPassword');
 const adminAddUser = document.getElementById('adminAddUser');
@@ -663,16 +534,11 @@ const adminUserList = document.getElementById('adminUserList');
 const adminTogglePass = document.getElementById('adminTogglePass');
 const adminEyeIcon = document.getElementById('adminEyeIcon');
 
-let isAuthorized = false;
-let currentUser = null;
-let userPasswords = {};
-let currentAnnouncementId = null;
+const sectionsContainer = document.getElementById('dynamicSectionsContainer');
 
-// Edit state
-let editingErrorId = null;
-let editingVideoId = null;
-
-// ========== PASSWORD TOGGLES ==========
+// ============================================================
+// PASSWORD TOGGLES
+// ============================================================
 let passVisible = false;
 togglePass.addEventListener('click', function() {
     passVisible = !passVisible;
@@ -689,7 +555,9 @@ adminTogglePass.addEventListener('click', function() {
     adminEyeIcon.style.color = adminPassVisible ? '#00ccff' : '#3a6a8a';
 });
 
-// ========== AUTH STATE ==========
+// ============================================================
+// AUTH STATE
+// ============================================================
 auth.onAuthStateChanged((user) => {
     authLoading.classList.add('hidden');
     if (user) {
@@ -701,7 +569,6 @@ auth.onAuthStateChanged((user) => {
         loadAllData();
         loadUsers();
         requestNotificationPermission();
-        // Mark first load complete after initial data loads
         setTimeout(() => { isFirstLoad = false; }, 5000);
         console.log('✅ Logged in:', user.email);
     } else {
@@ -712,7 +579,6 @@ auth.onAuthStateChanged((user) => {
     }
 });
 
-// ========== LOGIN ==========
 loginBtn.addEventListener('click', function() {
     const email = emailInput.value.trim();
     const password = passInput.value.trim();
@@ -755,6 +621,298 @@ logoutBtn.addEventListener('click', function() {
 });
 
 // ============================================================
+// SECTION MANAGEMENT - CORE FEATURE
+// ============================================================
+
+function loadSections() {
+    db.collection('sections').orderBy('order', 'asc').onSnapshot((snapshot) => {
+        const sectionList = document.getElementById('adminSectionList');
+        sectionList.innerHTML = '';
+        
+        const sectionDropdown = document.getElementById('adminFileSection');
+        sectionDropdown.innerHTML = '<option value="default">Default Section</option>';
+        
+        if (!snapshot.empty) {
+            let count = 0;
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const id = doc.id;
+                count++;
+                
+                const opt = document.createElement('option');
+                opt.value = id;
+                opt.textContent = data.name || 'Unnamed Section';
+                sectionDropdown.appendChild(opt);
+                
+                const div = document.createElement('div');
+                div.className = 'admin-list-item';
+                div.style.borderLeft = '3px solid #a78bfa';
+                div.innerHTML = `
+                    <div class="item-text">
+                        <i class="fas ${data.icon || 'fa-folder'}" style="color:#a78bfa;width:1.2rem;"></i>
+                        <span style="color:#b0d5ff;">${data.name || 'Unnamed'}</span>
+                        <span class="section-badge ${data.active !== false ? 'active' : 'inactive'}">
+                            ${data.active !== false ? 'Active' : 'Inactive'}
+                        </span>
+                        <span style="color:#3a6a8a;font-size:0.6rem;margin-left:0.3rem;">${data.itemCount || 0} items</span>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-sm" style="padding:0.1rem 0.5rem;font-size:0.6rem;background:#1a3a5f;border:1px solid #2a6a8b;" onclick="editSection('${id}','${data.name || ''}','${data.icon || 'fa-folder'}',${data.active !== false})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-sm danger" style="padding:0.1rem 0.5rem;font-size:0.6rem;" onclick="deleteSection('${id}','${data.name || 'Unnamed'}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                sectionList.appendChild(div);
+            });
+            document.getElementById('sectionCount').textContent = count;
+        } else {
+            document.getElementById('sectionCount').textContent = '0';
+            sectionList.innerHTML = `<div style="color:#3a6a8a;font-size:0.7rem;text-align:center;padding:0.5rem;">No sections created yet</div>`;
+        }
+        
+        renderDynamicSections();
+    }, () => {});
+}
+
+adminAddSection.addEventListener('click', function() {
+    const name = adminSectionName.value.trim();
+    const icon = adminSectionIcon.value.trim() || 'fa-folder';
+    
+    if (!name) {
+        adminSectionStatus.textContent = '⚠️ Please enter section name.';
+        adminSectionStatus.className = 'admin-status error';
+        return;
+    }
+    
+    db.collection('sections').add({
+        name: name,
+        icon: icon,
+        active: true,
+        order: Date.now(),
+        itemCount: 0,
+        createdAt: Date.now()
+    }).then(() => {
+        adminSectionStatus.textContent = '✅ Section "' + name + '" created!';
+        adminSectionStatus.className = 'admin-status success';
+        adminSectionName.value = '';
+        adminSectionIcon.value = 'fa-folder';
+        setTimeout(() => { adminSectionStatus.textContent = ''; }, 3000);
+        showToast('📂 New Section Created', `"${name}" section has been added.`, 'section');
+        
+        if ('Notification' in window && Notification.permission === 'granted') {
+            new Notification('📂 New Section Created', {
+                body: `"${name}" section has been added.`,
+                icon: '/favicon.ico'
+            });
+        }
+    }).catch((err) => {
+        adminSectionStatus.textContent = '❌ ' + err.message;
+        adminSectionStatus.className = 'admin-status error';
+    });
+});
+
+function editSection(id, currentName, currentIcon, currentStatus) {
+    const newName = prompt('Enter new section name:', currentName);
+    if (newName === null) return;
+    if (newName.trim() === '') {
+        adminSectionStatus.textContent = '⚠️ Name cannot be empty.';
+        adminSectionStatus.className = 'admin-status error';
+        return;
+    }
+    
+    const newIcon = prompt('Enter icon class (e.g., fa-gamepad):', currentIcon || 'fa-folder');
+    if (newIcon === null) return;
+    
+    const newStatus = confirm('Set section as ACTIVE? Click OK for Active, Cancel for Inactive.');
+    
+    db.collection('sections').doc(id).update({
+        name: newName.trim(),
+        icon: newIcon.trim() || 'fa-folder',
+        active: newStatus
+    }).then(() => {
+        adminSectionStatus.textContent = '✅ Section updated!';
+        adminSectionStatus.className = 'admin-status success';
+        setTimeout(() => { adminSectionStatus.textContent = ''; }, 3000);
+        showToast('✏️ Section Updated', `"${currentName}" → "${newName}"`, 'section');
+    }).catch((err) => {
+        adminSectionStatus.textContent = '❌ ' + err.message;
+        adminSectionStatus.className = 'admin-status error';
+    });
+}
+
+function deleteSection(id, name) {
+    if (!confirm(`Delete section "${name}" permanently? This will NOT delete items inside it.`)) return;
+    
+    db.collection('sections').doc(id).delete()
+        .then(() => {
+            adminSectionStatus.textContent = '✅ Section deleted';
+            adminSectionStatus.className = 'admin-status success';
+            setTimeout(() => { adminSectionStatus.textContent = ''; }, 3000);
+            showToast('🗑️ Section Deleted', `"${name}" section has been removed.`, 'section');
+        })
+        .catch((err) => {
+            adminSectionStatus.textContent = '❌ ' + err.message;
+            adminSectionStatus.className = 'admin-status error';
+        });
+}
+
+window.editSection = editSection;
+window.deleteSection = deleteSection;
+
+// ============================================================
+// RENDER DYNAMIC SECTIONS
+// ============================================================
+
+function renderDynamicSections() {
+    db.collection('sections').orderBy('order', 'asc').get()
+        .then((snapshot) => {
+            sectionsContainer.innerHTML = '';
+            
+            if (snapshot.empty) {
+                sectionsContainer.innerHTML = `
+                    <div style="background:#0d1c2b;border-radius:1.5rem;padding:2rem;text-align:center;border:1px solid #1f4a6b;margin-bottom:1rem;">
+                        <i class="fas fa-layer-group" style="font-size:2.5rem;color:#3a6a8a;"></i>
+                        <h4 style="color:#6a8fa8;margin-top:0.5rem;">No sections created yet</h4>
+                        <p style="color:#3a6a8a;font-size:0.8rem;">Use the Section Management panel above to create sections.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const id = doc.id;
+                
+                if (data.active === false) return;
+                
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'dynamic-section';
+                sectionDiv.dataset.sectionId = id;
+                sectionDiv.innerHTML = `
+                    <div class="section-header">
+                        <h4><i class="fas ${data.icon || 'fa-folder'}" style="color:#a78bfa;"></i> ${data.name || 'Unnamed Section'}</h4>
+                        <span style="color:#3a6a8a;font-size:0.6rem;"><i class="fas fa-${data.active !== false ? 'check-circle' : 'times-circle'}" style="color:${data.active !== false ? '#4ade80' : '#ff6b6b'};"></i> ${data.active !== false ? 'Active' : 'Inactive'}</span>
+                    </div>
+                    <div class="section-content" id="sectionContent_${id}">
+                        <div class="empty-section-msg">Loading items...</div>
+                    </div>
+                `;
+                sectionsContainer.appendChild(sectionDiv);
+                
+                loadSectionItems(id, data.name);
+            });
+        })
+        .catch(() => {});
+}
+
+function loadSectionItems(sectionId, sectionName) {
+    const container = document.getElementById('sectionContent_' + sectionId);
+    if (!container) return;
+    
+    db.collection('files')
+        .where('sectionId', '==', sectionId)
+        .orderBy('timestamp', 'desc')
+        .get()
+        .then((snapshot) => {
+            container.innerHTML = '';
+            
+            db.collection('sections').doc(sectionId).update({
+                itemCount: snapshot.size
+            }).catch(() => {});
+            
+            if (snapshot.empty) {
+                container.innerHTML = `<div class="empty-section-msg">No items in this section</div>`;
+                return;
+            }
+            
+            snapshot.forEach(doc => {
+                const file = doc.data();
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'item-card';
+                itemDiv.innerHTML = `
+                    <div class="item-label">${file.label || 'FILE'}</div>
+                    <h5>${file.title || 'Untitled'}</h5>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.2rem;">
+                        <span style="font-size:0.55rem;color:#3a6a8a;">${file.version || 'v1'}</span>
+                        <span style="font-size:0.55rem;color:#4ade80;"><i class="fas fa-download"></i> ${file.downloads || 0}</span>
+                    </div>
+                `;
+                container.appendChild(itemDiv);
+            });
+        })
+        .catch(() => {
+            container.innerHTML = `<div class="empty-section-msg" style="color:#ff6b6b;">Error loading items</div>`;
+        });
+}
+
+// ============================================================
+// NOTIFICATION LISTENERS
+// ============================================================
+
+db.collection('files').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
+    if (!isFirstLoad && snapshot.size > previousFileCount && previousFileCount > 0) {
+        const newDocs = snapshot.docs.slice(0, snapshot.size - previousFileCount);
+        newDocs.forEach(doc => {
+            const data = doc.data();
+            if (data.title && canSendNotification()) {
+                const title = '🔥 New File Added';
+                const body = `${data.title} - A new premium file has been uploaded.`;
+                showToast(title, body, 'file');
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification(title, { body: body, icon: '/favicon.ico', vibrate: [200, 100, 200] });
+                }
+            }
+        });
+    }
+    previousFileCount = snapshot.size;
+}, () => {});
+
+db.collection('videos').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
+    if (!isFirstLoad && snapshot.size > previousVideoCount && previousVideoCount > 0) {
+        const newDocs = snapshot.docs.slice(0, snapshot.size - previousVideoCount);
+        newDocs.forEach(doc => {
+            const data = doc.data();
+            if (data.title && canSendNotification()) {
+                const title = '🎥 New Video Added';
+                const body = `${data.title} - A new gaming video has been uploaded.`;
+                showToast(title, body, 'video');
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification(title, { body: body, icon: '/favicon.ico', vibrate: [200, 100, 200] });
+                }
+            }
+        });
+    }
+    previousVideoCount = snapshot.size;
+}, () => {});
+
+db.collection('content').doc('announcement').onSnapshot((doc) => {
+    const el = document.getElementById('announceText');
+    let currentText = '';
+    if (doc.exists) {
+        const data = doc.data();
+        currentText = data.text || 'Welcome!';
+        el.innerHTML = `<strong>📢</strong> ${currentText}`;
+        adminAnnounceInput.value = data.text || '';
+    } else {
+        el.innerHTML = '<strong>📢</strong> No announcement';
+        adminAnnounceInput.value = '';
+    }
+    
+    if (!isFirstLoad && currentText && previousAnnouncementText && currentText !== previousAnnouncementText && canSendNotification()) {
+        const title = '📢 New Announcement';
+        const body = currentText;
+        showToast(title, body, 'announcement');
+        if ('Notification' in window && Notification.permission === 'granted') {
+            new Notification(title, { body: body, icon: '/favicon.ico', vibrate: [200, 100, 200] });
+        }
+    }
+    previousAnnouncementText = currentText;
+}, () => {});
+
+// ============================================================
 // ANNOUNCEMENT FUNCTIONS
 // ============================================================
 
@@ -766,11 +924,7 @@ adminUpdateAnnounce.addEventListener('click', function() {
         return;
     }
     const announceData = { text: text, timestamp: Date.now() };
-    const savePromise = currentAnnouncementId 
-        ? db.collection('content').doc('announcement').update(announceData)
-        : db.collection('content').doc('announcement').set(announceData);
-    
-    savePromise
+    db.collection('content').doc('announcement').set(announceData)
         .then(() => {
             adminAnnounceStatus.textContent = '✅ Announcement updated!';
             adminAnnounceStatus.className = 'admin-status success';
@@ -784,15 +938,9 @@ adminUpdateAnnounce.addEventListener('click', function() {
 });
 
 adminDeleteAnnounce.addEventListener('click', function() {
-    if (!currentAnnouncementId) {
-        adminAnnounceStatus.textContent = '⚠️ No announcement to delete.';
-        adminAnnounceStatus.className = 'admin-status error';
-        return;
-    }
     if (!confirm('Delete current announcement?')) return;
     db.collection('content').doc('announcement').delete()
         .then(() => {
-            currentAnnouncementId = null;
             adminAnnounceStatus.textContent = '✅ Announcement deleted!';
             adminAnnounceStatus.className = 'admin-status success';
             adminAnnounceInput.value = '';
@@ -904,6 +1052,9 @@ function loadUsers() {
         });
 }
 
+window.deleteUser = deleteUser;
+window.viewPassword = viewPassword;
+
 // ============================================================
 // FF HEADSHOTS FUNCTIONS
 // ============================================================
@@ -942,6 +1093,7 @@ function deleteFFHeadshot(id, title) {
         db.collection('ffHeadshots').doc(id).delete().catch(() => {});
     }
 }
+window.deleteFFHeadshot = deleteFFHeadshot;
 
 // ============================================================
 // FF LOCATION FUNCTIONS
@@ -981,6 +1133,7 @@ function deleteFFLocation(id, title) {
         db.collection('ffLocation').doc(id).delete().catch(() => {});
     }
 }
+window.deleteFFLocation = deleteFFLocation;
 
 // ============================================================
 // ERROR FIR FUNCTIONS
@@ -1071,6 +1224,8 @@ function deleteError(id, title) {
         if (editingErrorId === id) resetErrorForm();
     }
 }
+window.deleteError = deleteError;
+window.editError = editError;
 
 // ============================================================
 // VIDEO FUNCTIONS
@@ -1151,8 +1306,17 @@ adminCancelVideoEdit.addEventListener('click', function() {
     setTimeout(() => { adminVideoStatus.textContent = ''; }, 2000);
 });
 
+function deleteVideo(id, title) {
+    if (confirm(`Delete "${title}"?`)) {
+        db.collection('videos').doc(id).delete().catch(() => {});
+        if (editingVideoId === id) resetVideoForm();
+    }
+}
+window.deleteVideo = deleteVideo;
+window.editVideo = editVideo;
+
 // ============================================================
-// FILE FUNCTIONS
+// FILE FUNCTIONS WITH SECTION SUPPORT
 // ============================================================
 
 adminAddFile.addEventListener('click', function() {
@@ -1160,12 +1324,15 @@ adminAddFile.addEventListener('click', function() {
     const label = adminFileLabel.value.trim() || 'PREMIUM';
     const link = adminFileLink.value.trim();
     const version = adminFileVersion.value.trim() || 'v1';
+    const sectionId = adminFileSection.value || null;
+    
     if (!title || !link) {
         adminFileStatus.textContent = '⚠️ Title and link required.';
         adminFileStatus.className = 'admin-status error';
         return;
     }
-    db.collection('files').add({
+    
+    const fileData = {
         title: title,
         label: label,
         fileLink: link,
@@ -1173,16 +1340,24 @@ adminAddFile.addEventListener('click', function() {
         downloads: 0,
         timestamp: Date.now(),
         updated: new Date().toLocaleDateString()
-    }).then(() => {
-        adminFileStatus.textContent = '✅ File added!';
-        adminFileStatus.className = 'admin-status success';
-        adminFileTitle.value = '';
-        adminFileLink.value = '';
-        setTimeout(() => { adminFileStatus.textContent = ''; }, 3000);
-    }).catch((err) => {
-        adminFileStatus.textContent = '❌ ' + err.message;
-        adminFileStatus.className = 'admin-status error';
-    });
+    };
+    
+    if (sectionId && sectionId !== 'default') {
+        fileData.sectionId = sectionId;
+    }
+    
+    db.collection('files').add(fileData)
+        .then(() => {
+            adminFileStatus.textContent = '✅ File added!';
+            adminFileStatus.className = 'admin-status success';
+            adminFileTitle.value = '';
+            adminFileLink.value = '';
+            setTimeout(() => { adminFileStatus.textContent = ''; }, 3000);
+        })
+        .catch((err) => {
+            adminFileStatus.textContent = '❌ ' + err.message;
+            adminFileStatus.className = 'admin-status error';
+        });
 });
 
 function deleteFile(id, title) {
@@ -1190,29 +1365,14 @@ function deleteFile(id, title) {
         db.collection('files').doc(id).delete().catch(() => {});
     }
 }
-
-function deleteVideo(id, title) {
-    if (confirm(`Delete "${title}"?`)) {
-        db.collection('videos').doc(id).delete().catch(() => {});
-        if (editingVideoId === id) resetVideoForm();
-    }
-}
-
-// Make functions global
-window.deleteUser = deleteUser;
-window.viewPassword = viewPassword;
 window.deleteFile = deleteFile;
-window.deleteVideo = deleteVideo;
-window.deleteFFHeadshot = deleteFFHeadshot;
-window.deleteFFLocation = deleteFFLocation;
-window.deleteError = deleteError;
-window.editError = editError;
-window.editVideo = editVideo;
 
 // ============================================================
-// LOAD DATA
+// LOAD ALL DATA
 // ============================================================
 function loadAllData() {
+    loadSections();
+    
     // Files
     db.collection('files').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
         const grid = document.getElementById('fileGrid');
@@ -1493,17 +1653,11 @@ function loadAllData() {
     }, () => {});
 }
 
-console.log('🔥 SHAZIL MODZ - Admin Panel with FREE Realtime Notifications');
+console.log('🔥 SHAZIL MODZ - Admin Panel with Section Management');
+console.log('✅ Added: Section Management (Add/Edit/Delete Sections)');
+console.log('✅ Files can be assigned to sections');
+console.log('✅ Dynamic sections render on the main page');
 console.log('✅ All existing features 100% intact');
-console.log('🔔 Realtime Notification System:');
-console.log('   - New Files → 🔥 New File Added');
-console.log('   - New Videos → 🎥 New Video Added');
-console.log('   - New Announcement → 📢 New Announcement');
-console.log('   - New Headshots → 🔥 New Headshot Added');
-console.log('   - New Location → 📍 New Location Added');
-console.log('   - New Error Fix → 🛠️ New Error Fix Added');
-console.log('💡 No Cloud Functions required - Works on Spark Plan!');
-console.log('📢 Browser Notifications + In-App Toasts');
 </script>
 </body>
 </html>
